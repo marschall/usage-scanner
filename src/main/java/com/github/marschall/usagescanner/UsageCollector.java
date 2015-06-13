@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,6 +23,8 @@ class UsageCollector {
   private Set<String> unusedMetaData;
 
   private Set<String> usedMetaData;
+
+  private static final Set<String> IGNORED_FOLDERS = new HashSet<>(Arrays.asList("target", "resources", ".settings"));
 
   UsageCollector(Set<String> metaData) {
     this.unusedMetaData = metaData;
@@ -40,11 +43,8 @@ class UsageCollector {
 
       @Override
       public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-        if (dir.getFileName().toString().equals("target")) {
-          return SKIP_SUBTREE;
-        } else {
-          return CONTINUE;
-        }
+        String fileName = dir.getFileName().toString();
+        return IGNORED_FOLDERS.contains(fileName) ? SKIP_SUBTREE : CONTINUE;
       }
 
       @Override
