@@ -20,8 +20,25 @@ public class FindUnusedMetaData {
 
     System.out.println("Unused MetaData:");
     for (String each : unusedMetaData) {
-      System.out.println(each);
+      System.out.println(toTableName(each));
     }
+  }
+
+  static String toTableName(String s) {
+    int length = s.length();
+    StringBuilder buffer = new StringBuilder(length + 5);
+    for (int i = 0; i < length; i++) {
+      char c = s.charAt(i);
+      if (c >= 'A' && c <= 'Z') {
+        if (i > 0) {
+          buffer.append('_');
+        }
+        buffer.append(c);
+      } else {
+        buffer.append((char) (c - 32));
+      }
+    }
+    return buffer.toString();
   }
 
 }
