@@ -2,6 +2,7 @@ package com.github.marschall.usagescanner;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
 import static java.nio.file.FileVisitResult.TERMINATE;
+import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,8 +37,21 @@ class UsageCollector {
 
   void scanFolder(Path folder) throws IOException {
     Files.walkFileTree(folder, new SimpleFileVisitor<Path>(){
+
+      @Override
+      public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+        if (dir.getFileName().toString().equals("target")) {
+          return SKIP_SUBTREE;
+        } else {
+          return CONTINUE;
+        }
+      }
+
       @Override
       public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        if (!file.getFileName().toString().endsWith(".java")) {
+          return CONTINUE;
+        }
         scanFile(file);
         return unusedMetaData.isEmpty() ? TERMINATE : CONTINUE;
       }
