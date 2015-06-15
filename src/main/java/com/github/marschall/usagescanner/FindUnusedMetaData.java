@@ -34,8 +34,10 @@ public class FindUnusedMetaData {
           buffer.append('_');
         }
         buffer.append(c);
-      } else {
+      } else if (c >= 'a' && c <= 'z') {
         buffer.append((char) (c - 32));
+      } else {
+        buffer.append(c);
       }
     }
     return buffer.toString();
