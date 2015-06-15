@@ -1,8 +1,9 @@
 package com.github.marschall.usagescanner;
 
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.nio.file.FileVisitResult.CONTINUE;
-import static java.nio.file.FileVisitResult.TERMINATE;
 import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
+import static java.nio.file.FileVisitResult.TERMINATE;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -60,7 +61,7 @@ class UsageCollector {
 
 
   void scanFile(Path file) throws IOException {
-    try (BufferedReader reader = Files.newBufferedReader(file)) {
+    try (BufferedReader reader = Files.newBufferedReader(file, ISO_8859_1)) {
       String line = reader.readLine();
       while (line != null) {
         Iterator<String> iterator = unusedMetaData.iterator();
